@@ -1,9 +1,32 @@
 import {Schema, model} from "mongoose";
+import {IFinancialData} from '../interfaces/index'
 
-const ExpenseSchema = new Schema({
-    concept : {type: String, required: true},
-    amount: {type: Number, required: true},
-    date: {type: Date, required: true}
+const ExpenseSchema = new Schema<IFinancialData>({
+    concept : {
+        type: String, 
+        required: true
+    },
+    amount: {
+        type: Number, 
+        required: true
+    },
+    fulldate: {
+        type: String, 
+        required: true, 
+        default: new Date().toLocaleDateString()
+    },
+    day: {
+        type: Number, 
+        required: true
+    },
+    month : {
+        type: Number, 
+        required: true
+    },
+    year: {
+        type: Number, 
+        required: true
+    }
 })
 
-export default model("Expense", ExpenseSchema)
+export default model<IFinancialData>("Expense", ExpenseSchema)

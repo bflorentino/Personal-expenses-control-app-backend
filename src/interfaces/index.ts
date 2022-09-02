@@ -1,14 +1,17 @@
 
-export interface financialData  {
+export interface IFinancialData  {
     amount : number,
     concept: string,
-    date : string
+    fulldate? : string,
+    day: number,
+    month: number,
+    year: number
 }
 
-export interface serverRes {
+export interface IServerRes {
 
     message: string | null,
-    data: string | null,
+    data: any,
     success : boolean,
     statusType : 200 | 400 | 401 | 404 | 500 
 }
