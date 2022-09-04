@@ -11,7 +11,7 @@ const addFinancialRecordController = async (req:Request, res:Response) => {
 
 const getFinancialDataByDateController = async (req:Request, res:Response) => {
 
-    const result : IServerRes = await FinancialRecord.getFinancialDataByDate(req.body, req.params.type as "expense" | "income")
+    const result : IServerRes = await FinancialRecord.getFinancialDataByDate(req.body.fulldate, req.params.type as "expense" | "income")
     res.statusCode = result.statusType
     res.send(result)
 }
@@ -25,9 +25,28 @@ const getDataByYearAndMonthController = async (req: Request, res: Response) => {
         res.send(result)
 }
 
+const updateData = async (req: Request, res: Response) => {
+    
+    const result : IServerRes = await FinancialRecord.updateFinancialData(req.params.id, req.body, 
+                                req.params.type as "expense" | "income")
+
+    res.statusCode = result.statusType
+    res.send(result)
+}
+
+const deleteData = async (req: Request, res: Response) => {
+    
+    const result : IServerRes = await FinancialRecord.deleteFinancialData(req.params.id, 
+                                req.params.type as "expense" | "income")
+
+    res.statusCode = result.statusType
+    res.send(result)
+}
 
 export default {
     addFinancialRecordController,
     getFinancialDataByDateController,
-    getDataByYearAndMonthController
+    getDataByYearAndMonthController,
+    updateData,
+    deleteData
 }

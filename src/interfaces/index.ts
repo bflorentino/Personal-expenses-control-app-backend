@@ -13,5 +13,5 @@ export interface IServerRes {
     message: string | null,
     data: any,
     success : boolean,
-    statusType : 200 | 400 | 401 | 404 | 500 
+    statusType : number
 }
