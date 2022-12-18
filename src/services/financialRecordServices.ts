@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import Expense from "../models/expenses";
 import Income from "../models/income";
-import { IFinancialData, IServerRes } from "../interfaces";
+import { IFinancialData, ILoan, IServerRes } from "../interfaces";
 import connectToDb from "../database/connection";
+import { addLoan } from "./loansServices"
 
 import {OK, 
        INTERNAL_SERVER_ERROR, 
@@ -27,9 +28,33 @@ const noFoundDocument:IServerRes = {
 
 const addFinancialData = async (record:IFinancialData, type:"expense"|"income")=> {
 
-    // Adding expenses or incomes to db
-    let financialDataModel = type === "expense" ? new Expense(record) : new Income(record) 
+    const recordToAdd : IFinancialData = {...record} 
     let res:IServerRes;
+
+    if(record.incomeType === 2 || record.expenseType === 2){
+
+        let loanApplied : ILoan = {
+            personName: record.personName as string,
+            day: record.day,
+            month: record.month,
+            year: record.year,
+            fulldate: record.fulldate,
+            amount: record.amount,
+            balance: record.amount,
+            isLender: type === "expense"
+        }
+
+        const loanId = await addLoan(loanApplied)
+
+        if(!loanId){
+            res = serverErrorInService;
+            return res
+        }
+        recordToAdd.loanId = loanId._id.toString()
+    }
+
+    // Adding expenses or incomes to db
+    let financialDataModel = type === "expense" ? new Expense(recordToAdd) : new Income(recordToAdd)
     
     try{
         await connectToDb()

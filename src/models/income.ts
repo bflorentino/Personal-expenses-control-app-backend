@@ -12,11 +12,19 @@ const IncomeSchema = new Schema<IFinancialData>({
             type: Number, 
             required: true
     },
-    fulldate: {
-            type: String, 
-            required: true, 
-            default: new Date().toLocaleDateString()
+    incomeType:{
+        type: Number,
+        required: true
     },
+    loanId:{
+        type:Number,
+        required:false
+    },
+        fulldate: {
+                type: String, 
+                required: true, 
+                default: new Date().toLocaleDateString()
+        },
     day: {
         type: Number, 
         required: true

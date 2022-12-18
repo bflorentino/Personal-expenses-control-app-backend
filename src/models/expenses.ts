@@ -10,6 +10,14 @@ const ExpenseSchema = new Schema<IFinancialData>({
         type: Number, 
         required: true
     },
+    expenseType:{
+        type: Number,
+        required: true
+    },
+    loanId:{
+        type: String,
+        required: false
+    },
     fulldate: {
         type: String, 
         required: true, 

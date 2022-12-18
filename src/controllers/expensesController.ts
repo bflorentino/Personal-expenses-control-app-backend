@@ -17,6 +17,8 @@ const getFinancialDataByDateController = async (req:Request, res:Response) => {
 }
 
 const getDataByYearAndMonthController = async (req: Request, res: Response) => {
+
+        console.log(req.body);
     
         const result : IServerRes = await FinancialRecord.getFinancialDataByMonthAndYear(req.body.month, 
                                         req.body.year, req.params.type as "expense" | "income")
