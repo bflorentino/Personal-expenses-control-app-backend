@@ -1,5 +1,5 @@
 import express from "express";
-import { FinancialRecordC } from "../controllers";
+import { FinancialRecordC, getActiveLoansC } from "../controllers";
 
 const route = express.Router()
 
@@ -9,5 +9,8 @@ route.post('/FinancialData/get/byDate/:type', FinancialRecordC.getFinancialDataB
 route.post('/FinancialData/get/byMonth/:type', FinancialRecordC.getDataByYearAndMonthController)
 route.put('/FinancialData/update/:id/:type', FinancialRecordC.updateData)
 route.delete('/FinancialData/delete/:id/:type', FinancialRecordC.deleteData)
+
+// LOANS ROUTES
+route.get('/loans', getActiveLoansC.getActiveLoansController)
 
 export default route

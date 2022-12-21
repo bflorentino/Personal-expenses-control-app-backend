@@ -3,28 +3,19 @@ import Expense from "../models/expenses";
 import Income from "../models/income";
 import { IFinancialData, ILoan, IServerRes } from "../interfaces";
 import connectToDb from "../database/connection";
-import { addLoan } from "./loansServices"
+import { addLoan, updateLoan } from "./loansServices"
 
 import {OK, 
-       INTERNAL_SERVER_ERROR, 
-       NOT_FOUND, 
        NO_CONTENT, 
-       CREATED
+       CREATED,
+       NOT_FOUND,
+       BAD_REQUEST,
+       INTERNAL_SERVER_ERROR,
+       errorInService,
+       noFoundDocument,
+       badRequestInService,
+
     } from '../constants/constants'
-
-const serverErrorInService:IServerRes = {
-    data : null,
-    message: "An error occured",
-    success: false,
-    statusType: INTERNAL_SERVER_ERROR
-}
-
-const noFoundDocument:IServerRes = {
-    data: null,
-    message: "Not found document in server",
-    statusType: NOT_FOUND,
-    success: false
-}
 
 const addFinancialData = async (record:IFinancialData, type:"expense"|"income")=> {
 
@@ -47,10 +38,34 @@ const addFinancialData = async (record:IFinancialData, type:"expense"|"income")=
         const loanId = await addLoan(loanApplied)
 
         if(!loanId){
-            res = serverErrorInService;
+            res = errorInService;
             return res
         }
         recordToAdd.loanId = loanId._id.toString()
+    }
+
+    if(record.incomeType === 3 || record.expenseType === 3 ){
+
+       const updated = await updateLoan(recordToAdd.loanId as string, record.amount)
+        
+       if(updated !== OK){
+
+        switch(updated){
+            
+            case BAD_REQUEST:
+                res = badRequestInService
+                break;
+            
+            case NOT_FOUND:
+                res = noFoundDocument
+                break;
+
+            default:
+                res = errorInService
+                break;
+        }
+        return res
+       }
     }
 
     // Adding expenses or incomes to db
@@ -69,7 +84,7 @@ const addFinancialData = async (record:IFinancialData, type:"expense"|"income")=
     }
     catch(e){
         console.log(e)
-        res = serverErrorInService
+        res = errorInService
     }
     return res
 }
@@ -94,7 +109,7 @@ const getFinancialDataByDate = async(date:string, type:"expense"|"income") => {
     }
     catch(e){
         console.log(e)
-        res = serverErrorInService
+        res = errorInService
     }
     return res
 }
@@ -119,7 +134,7 @@ const getFinancialDataByMonthAndYear = async(month: number, year: number, type:"
     }
     catch(e){
         console.log(e)
-        res = serverErrorInService
+        res = errorInService
     }
     return res
 }
@@ -151,14 +166,13 @@ const updateFinancialData = async(id:string, record:IFinancialData, type:"expens
                 statusType: OK,
                 success: true
             }
+            return res
         }
-        else{
-            res = noFoundDocument
-        }
+        res = noFoundDocument
     }
     catch(e){
         console.log(e)
-        res = serverErrorInService;
+        res = errorInService;
     }
     return res
 }
@@ -182,13 +196,13 @@ const deleteFinancialData = async (id: string, type: "expense"|"income") => {
                 statusType: NO_CONTENT,
                 success: true
             } 
-        }else{
-            res = noFoundDocument
+            return res
         }
+        res = noFoundDocument
     }
     catch(e){
         console.log(e)
-        res = serverErrorInService
+        res = errorInService
     }
     return res
 }

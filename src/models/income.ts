@@ -17,7 +17,7 @@ const IncomeSchema = new Schema<IFinancialData>({
         required: true
     },
     loanId:{
-        type:Number,
+        type:String,
         required:false
     },
         fulldate: {
