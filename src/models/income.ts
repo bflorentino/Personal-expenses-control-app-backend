@@ -20,11 +20,10 @@ const IncomeSchema = new Schema<IFinancialData>({
         type:String,
         required:false
     },
-        fulldate: {
-                type: String, 
-                required: true, 
-                default: new Date().toLocaleDateString()
-        },
+    fulldate: {
+        type: Date, 
+        required: true, 
+    },
     day: {
         type: Number, 
         required: true

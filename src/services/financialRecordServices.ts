@@ -4,13 +4,13 @@ import Income from "../models/income";
 import { IFinancialData, ILoan, IServerRes } from "../interfaces";
 import connectToDb from "../database/connection";
 import { addLoan, updateLoan } from "./loansServices"
+import { ExpenseTypes, IncomesTypes } from "../models/transaction_types";
 
 import {OK, 
        NO_CONTENT, 
        CREATED,
        NOT_FOUND,
        BAD_REQUEST,
-       INTERNAL_SERVER_ERROR,
        errorInService,
        noFoundDocument,
        badRequestInService,
@@ -121,9 +121,18 @@ const getFinancialDataByMonthAndYear = async(month: number, year: number, type:"
     try{
         await connectToDb();
         
-        let result = type === "expense" 
+        let result:any = type === "expense" 
                 ? await Expense.find({month, year}) 
-                : await Income.find({month, year});
+                : await Income.find({month, year});        
+
+        for (let trans of result) {
+
+           let transaction = type === "expense" 
+                            ? await ExpenseTypes.findById(trans.expenseType).exec()
+                            : await IncomesTypes.findById(trans.incomeType).exec()
+            
+            trans._doc.transactionType = transaction?.description
+        }
 
         res = {
             data: result,

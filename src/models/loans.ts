@@ -19,9 +19,8 @@ const LoanSchema = new Schema<ILoan>({
         required:true,
     },
     fulldate: {
-        type: String, 
+        type: Date, 
         required: true, 
-        default: new Date().toLocaleDateString()
     },
     balance:{
         type: Number,

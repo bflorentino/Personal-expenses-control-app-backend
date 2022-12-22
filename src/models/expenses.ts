@@ -19,9 +19,8 @@ const ExpenseSchema = new Schema<IFinancialData>({
         required: false
     },
     fulldate: {
-        type: String, 
+        type: Date, 
         required: true, 
-        default: new Date().toLocaleDateString()
     },
     day: {
         type: Number, 
