@@ -5,6 +5,7 @@ import { IFinancialData, ILoan, IServerRes } from "../interfaces";
 import connectToDb from "../database/connection";
 import { addLoan, updateLoan } from "./loansServices"
 import { ExpenseTypes, IncomesTypes } from "../models/transaction_types";
+import { sumTransactions } from "../tools/utilities";
 
 import {OK, 
        NO_CONTENT, 
@@ -134,8 +135,10 @@ const getFinancialDataByMonthAndYear = async(month: number, year: number, type:"
             trans._doc.transactionType = transaction?.description
         }
 
+        const totalAmount = sumTransactions(result)
+
         res = {
-            data: result,
+            data: { transactions:result, totalAmount},
             success: true,
             message: null,
             statusType: OK
