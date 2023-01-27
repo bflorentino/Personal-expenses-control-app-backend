@@ -4,8 +4,8 @@
   "description": "Application to manage your personal expenses",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon ./src/index.ts",
-    "start": "ts-node ./src/index.ts"
+    "dev": "nodemon index.ts",
+    "start": "ts-node index.ts"
   },
   "author": "Bryan Xavier Florentino Montero",
   "license": "ISC",

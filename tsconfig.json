@@ -5,7 +5,6 @@
       "lib": ["es6"],                     
       "allowJs": true,
       "outDir": "build",                          
-      "rootDir": "src",
       "strict": true,         
       "noImplicitAny": true,
       "esModuleInterop": true,
@@ -13,8 +12,8 @@
     },
     "include": [
       "src",
-      "index.d.ts"
-    ],
+      "index.d.ts",
+      "index.ts"    ],
     "exclude": [
       "node_modules"
     ]
